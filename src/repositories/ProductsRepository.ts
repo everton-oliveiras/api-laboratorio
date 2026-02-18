@@ -23,4 +23,27 @@ export class ProductsRepository {
         const products = await prisma.product.findMany()
         return products;
     }
+
+    async delete(id: string) {
+        const product = await prisma.product.delete({
+            where: {
+                id
+            },
+        });
+        return product;
+    }
+
+    async update(id: string, name: string, price: number, quantity: number) {
+        const product = await prisma.product.update({
+            where: {
+                id: id,
+            },
+            data: {
+                name,
+                price,
+                quantity,
+            },
+        });
+        return product;
+    }
 }
