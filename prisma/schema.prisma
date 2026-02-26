@@ -6,10 +6,6 @@
 //  output   = "../src/generated/prisma"
 //}
 
-//datasource db {
-//  provider = "sqlite"
-//}
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,12 +15,26 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+// Nossa nova tabela de Clientes (em inglês)
+model Client {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  products  Product[] // Relacionamento: Um cliente pode ter vários produtos
+
+  @@map("clients")
+}
+
 model Product {
   id          String   @id @default(uuid())
   name        String
   price       Decimal
   quantity    Int
   created_at  DateTime @default(now())
+
+  // Campos novos fazendo a ligação com o Client
+  clientId    Int?      // Guarda o ID do cliente (o "?" deixa ser opcional)
+  client      Client?   @relation(fields: [clientId], references: [id]) 
 
   @@map("products")
 }
